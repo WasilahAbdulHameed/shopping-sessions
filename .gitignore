@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+scratch/
+data/
+output/
+dev-data/
+dev-output/
+profile-output/
+*.backup
+Dockerfile.backup
+pipeline/*backup*.py
+pipeline-original.txt
+profile-results.txt
+profile-8threads.txt
+csv_cleaner.rs
