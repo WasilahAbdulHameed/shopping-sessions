@@ -14,3 +14,5 @@ pipeline-original.txt
 profile-results.txt
 profile-8threads.txt
 csv_cleaner.rs
+
+test-native-output/

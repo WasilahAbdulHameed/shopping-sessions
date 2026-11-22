@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import csv, glob, json, os, re, time, sys
+import csv, glob, json, os, re, time, sys, subprocess
 from pathlib import Path
 import duckdb
 
@@ -25,6 +25,12 @@ def q(sql):
         print(f"[TIMING] SQL {time.perf_counter()-started:.3f}s | {label}", file=sys.stderr, flush=True)
 
 def _clean(kind, cols):
+    native = Path('/app/csv_cleaner')
+    if native.is_file():
+        dst = SCRATCH/(kind+'_clean.csv')
+        subprocess.run([str(native), str(DATA/kind), str(dst), ','.join(cols), str(len(cols))], check=True)
+        schema = '{'+','.join(lit(c)+": 'VARCHAR'" for c in cols)+'}'
+    return f"read_csv({lit(dst)}, columns={schema}, header=true, delim=',', quote='\"', escape='\"', auto_detect=false, nullstr='', allow_quoted_nulls=true, new_line='\\n')"
     # The contest dialect does not allow embedded commas, quotes or LF.
     # Validate before removing syntactic quotes. Preserve CR as field content.
     field = rb'(?:[^,"\n]*|"[^,"\n]*")'
